@@ -25,7 +25,7 @@
 
 		<script>
 			async function loadPhotos() {
-				const res = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/photo-portfolio/main/data/photos.json");
+				const res = await fetch("https://raw.githubusercontent.com/jtywa/photo-portfolio/main/data/photos.json");
 				const photos = await res.json();
 
 				const filter = document.getElementById("filterCategory").value;
