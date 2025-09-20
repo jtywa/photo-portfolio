@@ -9,7 +9,7 @@ export async function handler(event) {
 	// ✅ Pull values from request body
 	const { fileName, fileContent, category } = JSON.parse(event.body);
 
-	const repoOwner = "YOUR_USERNAME";
+	const repoOwner = "jtywa";
 	const repoName = "photo-portfolio";
 	const branch = "main";
 	const token = process.env.GITHUB_TOKEN;

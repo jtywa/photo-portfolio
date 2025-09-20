@@ -1,4 +1,4 @@
-const repoOwner = "YOUR_USERNAME";
+const repoOwner = "jtywa";
 const repoName = "photo-portfolio";
 const branch = "main";
 
