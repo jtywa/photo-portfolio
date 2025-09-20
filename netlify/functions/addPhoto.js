@@ -1,8 +1,11 @@
 // netlify/functions/addPhoto.js
-
-export async function handler(event) {
-	if (event.httpMethod !== "POST") {
-		return { statusCode: 405, body: "Method Not Allowed" };
+export async function handler(event, context) {
+	// Require a logged-in user
+	if (!context.clientContext || !context.clientContext.user) {
+		return {
+			statusCode: 401,
+			body: JSON.stringify({ error: "Not authorized" }),
+		};
 	}
 
 	// ✅ Pull values from request body

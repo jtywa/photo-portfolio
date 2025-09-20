@@ -2,33 +2,62 @@
 <html>
 	<head>
 		<title>Photo Admin</title>
-		<link rel="stylesheet" href="style.css" />
+		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 	</head>
 	<body>
 		<h1>Photo Admin</h1>
 
-		<h2>Upload New Photo</h2>
-		<input type="file" id="photoFile" />
-		<select id="photoCategory">
-			<option value="sunsets">Sunsets</option>
-			<option value="mountains">Mountains</option>
-		</select>
-		<button id="uploadBtn">Upload</button>
+		<!-- Login/Logout UI -->
+		<div id="auth">
+			<button onclick="netlifyIdentity.open()">Login / Signup</button>
+			<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
+		</div>
 
-		<h2>Existing Photos</h2>
-		<select id="filterCategory">
-			<option value="all">All Categories</option>
-			<option value="sunsets">Sunsets</option>
-			<option value="mountains">Mountains</option>
-		</select>
+		<!-- Admin Panel (hidden until logged in) -->
+		<div id="adminPanel" style="display: none">
+			<h2>Upload New Photo</h2>
+			<input type="file" id="photoFile" />
+			<select id="photoCategory">
+				<option value="weddings">Weddings</option>
+				<option value="events">Events</option>
+				<option value="corporate">Corporate</option>
+			</select>
+			<button id="uploadBtn">Upload</button>
 
-		<ul id="photoList"></ul>
+			<h2>Existing Photos</h2>
+			<select id="filterCategory">
+				<option value="all">All Categories</option>
+				<option value="weddings">Weddings</option>
+				<option value="events">Events</option>
+				<option value="corporate">Corporate</option>
+			</select>
+			<ul id="photoList"></ul>
+		</div>
 
 		<script>
-			async function loadPhotos() {
-				const res = await fetch("https://raw.githubusercontent.com/jtywa/photo-portfolio/main/data/photos.json");
-				const photos = await res.json();
+			// Show/hide admin panel based on login status
+			netlifyIdentity.on("init", (user) => {
+				if (user) {
+					document.getElementById("adminPanel").style.display = "block";
+					document.getElementById("logoutBtn").style.display = "inline";
+				}
+			});
 
+			netlifyIdentity.on("login", (user) => {
+				document.getElementById("adminPanel").style.display = "block";
+				document.getElementById("logoutBtn").style.display = "inline";
+				netlifyIdentity.close();
+			});
+
+			netlifyIdentity.on("logout", () => {
+				document.getElementById("adminPanel").style.display = "none";
+				document.getElementById("logoutBtn").style.display = "none";
+			});
+
+			// Functions to load, upload, delete (reuse your existing code here)
+			async function loadPhotos() {
+				const res = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/photo-portfolio/main/data/photos.json?ts=" + Date.now());
+				const photos = await res.json();
 				const filter = document.getElementById("filterCategory").value;
 				const list = document.getElementById("photoList");
 				list.innerHTML = "";
@@ -38,9 +67,9 @@
 					.forEach((photo) => {
 						const li = document.createElement("li");
 						li.innerHTML = `
-                            <img class="thumbnail" src="${photo.url}"/>
-                            <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
-                        `;
+            [${photo.category}] ${photo.url.split("/").pop()} 
+            <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
+          `;
 						list.appendChild(li);
 					});
 			}
@@ -60,8 +89,6 @@
 				}
 			}
 
-			document.getElementById("filterCategory").onchange = loadPhotos;
-
 			document.getElementById("uploadBtn").onclick = () => {
 				const file = document.getElementById("photoFile").files[0];
 				const category = document.getElementById("photoCategory").value;
@@ -79,7 +106,6 @@
 							category,
 						}),
 					});
-
 					if (res.ok) {
 						alert("Photo uploaded!");
 						loadPhotos();
@@ -90,8 +116,9 @@
 				reader.readAsDataURL(file);
 			};
 
-			// Load photo list when page opens
+			// Load photos when page opens
 			loadPhotos();
+			document.getElementById("filterCategory").onchange = loadPhotos;
 		</script>
 	</body>
 </html>
