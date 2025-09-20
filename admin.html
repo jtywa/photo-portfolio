@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Photo Admin</title>
+	</head>
+	<body>
+		<h1>Photo Admin</h1>
+		<input type="file" id="photoFile" />
+		<input type="text" id="photoTitle" placeholder="Title" />
+		<button id="uploadBtn">Upload</button>
+
+		<script>
+			const repoOwner = "YOUR_USERNAME";
+			const repoName = "photo-portfolio";
+			const branch = "main";
+			const token = "REPLACE_WITH_ENV_TOKEN"; // ⚠️ secure this with Netlify/Vercel env vars!
+
+			async function uploadFile(file, title) {
+				const reader = new FileReader();
+				reader.onloadend = async () => {
+					const content = reader.result.split(",")[1];
+					const path = `uploads/${file.name}`;
+
+					// 1. Upload image to GitHub
+					await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
+						method: "PUT",
+						headers: {
+							Authorization: `token ${token}`,
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							message: `Upload ${file.name}`,
+							content: content,
+							branch: branch,
+						}),
+					});
+
+					// 2. Fetch current photos.json
+					const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/photos.json`, {
+						headers: { Authorization: `token ${token}` },
+					});
+					const fileData = await res.json();
+					const oldContent = JSON.parse(atob(fileData.content));
+
+					// 3. Add new photo entry
+					oldContent.push({ title, url: path });
+
+					// 4. Save updated photos.json
+					await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/photos.json`, {
+						method: "PUT",
+						headers: {
+							Authorization: `token ${token}`,
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							message: `Update photos.json with ${file.name}`,
+							content: btoa(JSON.stringify(oldContent, null, 2)),
+							sha: fileData.sha,
+							branch: branch,
+						}),
+					});
+
+					alert("Photo uploaded!");
+				};
+				reader.readAsDataURL(file);
+			}
+
+			document.getElementById("uploadBtn").onclick = () => {
+				const file = document.getElementById("photoFile").files[0];
+				const title = document.getElementById("photoTitle").value;
+				if (!file || !title) return alert("Select a file and title!");
+				uploadFile(file, title);
+			};
+		</script>
+	</body>
+</html>
