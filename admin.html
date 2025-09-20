@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Photo Admin</title>
+		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
 		<h1>Photo Admin</h1>
@@ -37,7 +38,7 @@
 					.forEach((photo) => {
 						const li = document.createElement("li");
 						li.innerHTML = `
-                            [${photo.category}] ${photo.url.split("/").pop()} 
+                            <img class="thumbnail" src="${photo.url}"/>
                             <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
                         `;
 						list.appendChild(li);
