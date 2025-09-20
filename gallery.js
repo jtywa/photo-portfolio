@@ -2,7 +2,7 @@ const repoOwner = "jtywa";
 const repoName = "photo-portfolio";
 const branch = "main";
 
-const jsonUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/data/photos.json?ts=${Date.now()}`;
+const jsonUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/data/photos.json`;
 
 fetch(jsonUrl)
 	.then((res) => res.json())
@@ -31,7 +31,7 @@ fetch(jsonUrl)
 
 			grouped[category].forEach((photo) => {
 				const img = document.createElement("img");
-				img.src = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${photo.url}?ts=${Date.now()}`;
+				img.src = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${photo.url}`;
 				img.alt = category;
 				img.className = "photo";
 				container.appendChild(img);
