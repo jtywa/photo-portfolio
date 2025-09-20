@@ -5,72 +5,94 @@
 	</head>
 	<body>
 		<h1>Photo Admin</h1>
+
+		<h2>Upload New Photo</h2>
 		<input type="file" id="photoFile" />
-		<input type="text" id="photoTitle" placeholder="Title" />
+		<select id="photoCategory">
+			<option value="weddings">Weddings</option>
+			<option value="events">Events</option>
+			<option value="corporate">Corporate</option>
+		</select>
 		<button id="uploadBtn">Upload</button>
 
+		<h2>Existing Photos</h2>
+		<select id="filterCategory">
+			<option value="all">All Categories</option>
+			<option value="weddings">Weddings</option>
+			<option value="events">Events</option>
+			<option value="corporate">Corporate</option>
+		</select>
+
+		<ul id="photoList"></ul>
+
 		<script>
-			const repoOwner = "jtywa";
-			const repoName = "photo-portfolio";
-			const branch = "main";
-			const token = "REPLACE_WITH_ENV_TOKEN"; // ⚠️ secure this with Netlify/Vercel env vars!
+			async function loadPhotos() {
+				const res = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/photo-portfolio/main/data/photos.json");
+				const photos = await res.json();
 
-			async function uploadFile(file, title) {
-				const reader = new FileReader();
-				reader.onloadend = async () => {
-					const content = reader.result.split(",")[1];
-					const path = `uploads/${file.name}`;
+				const filter = document.getElementById("filterCategory").value;
+				const list = document.getElementById("photoList");
+				list.innerHTML = "";
 
-					// 1. Upload image to GitHub
-					await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
-						method: "PUT",
-						headers: {
-							Authorization: `token ${token}`,
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							message: `Upload ${file.name}`,
-							content: content,
-							branch: branch,
-						}),
+				photos
+					.filter((photo) => filter === "all" || photo.category === filter)
+					.forEach((photo) => {
+						const li = document.createElement("li");
+						li.innerHTML = `
+                            [${photo.category}] ${photo.url.split("/").pop()} 
+                            <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
+                        `;
+						list.appendChild(li);
 					});
-
-					// 2. Fetch current photos.json
-					const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/photos.json`, {
-						headers: { Authorization: `token ${token}` },
-					});
-					const fileData = await res.json();
-					const oldContent = JSON.parse(atob(fileData.content));
-
-					// 3. Add new photo entry
-					oldContent.push({ title, url: path });
-
-					// 4. Save updated photos.json
-					await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/photos.json`, {
-						method: "PUT",
-						headers: {
-							Authorization: `token ${token}`,
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							message: `Update photos.json with ${file.name}`,
-							content: btoa(JSON.stringify(oldContent, null, 2)),
-							sha: fileData.sha,
-							branch: branch,
-						}),
-					});
-
-					alert("Photo uploaded!");
-				};
-				reader.readAsDataURL(file);
 			}
+
+			async function deletePhoto(fileName) {
+				if (!confirm(`Delete ${fileName}?`)) return;
+				const res = await fetch("/.netlify/functions/deletePhoto", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ fileName }),
+				});
+				if (res.ok) {
+					alert("Photo deleted!");
+					loadPhotos();
+				} else {
+					alert("Delete failed!");
+				}
+			}
+
+			document.getElementById("filterCategory").onchange = loadPhotos;
 
 			document.getElementById("uploadBtn").onclick = () => {
 				const file = document.getElementById("photoFile").files[0];
-				const title = document.getElementById("photoTitle").value;
-				if (!file || !title) return alert("Select a file and title!");
-				uploadFile(file, title);
+				const category = document.getElementById("photoCategory").value;
+				if (!file) return alert("Select a file!");
+
+				const reader = new FileReader();
+				reader.onloadend = async () => {
+					const content = reader.result.split(",")[1];
+					const res = await fetch("/.netlify/functions/addPhoto", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							fileName: file.name,
+							fileContent: content,
+							category,
+						}),
+					});
+
+					if (res.ok) {
+						alert("Photo uploaded!");
+						loadPhotos();
+					} else {
+						alert("Upload failed!");
+					}
+				};
+				reader.readAsDataURL(file);
 			};
+
+			// Load photo list when page opens
+			loadPhotos();
 		</script>
 	</body>
 </html>

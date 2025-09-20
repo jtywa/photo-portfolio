@@ -1,10 +1,10 @@
 [
 	{
-		"title": "Sunset Beach",
+		"category": "sunsets",
 		"url": "uploads/sunset.jpg"
 	},
 	{
-		"title": "Mountain Hike",
+		"category": "mountains",
 		"url": "uploads/mountain.jpg"
 	}
 ]

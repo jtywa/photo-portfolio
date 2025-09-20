@@ -1,4 +1,40 @@
-.photo > img {
-	max-height: 400px;
-	max-width: 400px;
+body {
+	font-family: sans-serif;
+	max-width: 900px;
+	margin: auto;
+	padding: 20px;
+	background: #fafafa;
+}
+
+h1 {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.gallery-section {
+	margin-bottom: 60px;
+}
+
+.gallery-section h2 {
+	margin-bottom: 15px;
+	border-bottom: 2px solid #ccc;
+	padding-bottom: 5px;
+}
+
+.gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 15px;
+}
+
+.photo {
+	width: 100%;
+	height: auto;
+	border-radius: 5px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+	transition: transform 0.2s ease;
+}
+
+.photo:hover {
+	transform: scale(1.03);
 }
