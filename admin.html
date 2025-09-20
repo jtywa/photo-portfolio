@@ -33,6 +33,21 @@
 		</div>
 
 		<script>
+			// 🔐 Secure fetch wrapper
+			async function secureFetch(url, options = {}) {
+				const user = netlifyIdentity.currentUser();
+				if (!user) throw new Error("Not logged in");
+
+				const token = await user.jwt(); // Identity JWT
+				return fetch(url, {
+					...options,
+					headers: {
+						...(options.headers || {}),
+						Authorization: `Bearer ${token}`, // attach token
+					},
+				});
+			}
+
 			// Show/hide admin panel based on login status
 			netlifyIdentity.on("init", (user) => {
 				if (user) {
@@ -52,7 +67,7 @@
 				document.getElementById("logoutBtn").style.display = "none";
 			});
 
-			// Functions to load, upload, delete (reuse your existing code here)
+			// Load photos from GitHub
 			async function loadPhotos() {
 				const res = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/photo-portfolio/main/data/photos.json?ts=" + Date.now());
 				const photos = await res.json();
@@ -65,16 +80,17 @@
 					.forEach((photo) => {
 						const li = document.createElement("li");
 						li.innerHTML = `
-            [${photo.category}] ${photo.url.split("/").pop()} 
-            <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
-          `;
+              [${photo.category}] ${photo.url.split("/").pop()} 
+              <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
+            `;
 						list.appendChild(li);
 					});
 			}
 
+			// Delete photo
 			async function deletePhoto(fileName) {
 				if (!confirm(`Delete ${fileName}?`)) return;
-				const res = await fetch("/.netlify/functions/deletePhoto", {
+				const res = await secureFetch("/.netlify/functions/deletePhoto", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ fileName }),
@@ -87,6 +103,7 @@
 				}
 			}
 
+			// Upload photo
 			document.getElementById("uploadBtn").onclick = () => {
 				const file = document.getElementById("photoFile").files[0];
 				const category = document.getElementById("photoCategory").value;
@@ -94,8 +111,8 @@
 
 				const reader = new FileReader();
 				reader.onloadend = async () => {
-					const content = reader.result.split(",")[1];
-					const res = await fetch("/.netlify/functions/addPhoto", {
+					const content = reader.result.split(",")[1]; // base64 without prefix
+					const res = await secureFetch("/.netlify/functions/addPhoto", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
