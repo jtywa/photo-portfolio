@@ -169,7 +169,7 @@ select {
 	border-radius: 6px;
 	background: #333;
 	color: white;
-	font-size: 14px;
+	font-size: 1.25rem;
 	opacity: 0;
 	transform: translateY(-20px);
 	transition: opacity 0.3s ease, transform 0.3s ease;
@@ -194,4 +194,9 @@ select {
 	background: rgb(215, 215, 215);
 	font-size: 2rem;
 	color: rgba(0, 0, 0, 0.3);
+}
+
+#loggedIn {
+	padding-right: 1rem;
+	border-right: 1px solid rgba(0, 0, 0, 0.5);
 }
