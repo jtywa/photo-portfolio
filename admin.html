@@ -80,7 +80,7 @@
 
 			// Load photos from GitHub
 			async function loadPhotos() {
-				const res = await fetch("https://raw.githubusercontent.com/jtywa/photo-portfolio/main/data/photos.json?ts=" + Date.now());
+				const res = await secureFetch("/.netlify/functions/getPhotos");
 				const photos = await res.json();
 				const filter = document.getElementById("filterCategory").value;
 				const list = document.getElementById("photoList");
