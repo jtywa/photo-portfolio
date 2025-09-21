@@ -10,7 +10,7 @@
 			<h3>Photo Admin</h3>
 			<div id="auth">
 				<div id="loggedIn" style="display: none">Logged in as Admin</div>
-				<button id="loginLogout" onclick="netlifyIdentity.open()">Login</button>
+				<button id="login" onclick="netlifyIdentity.open()">Login</button>
 				<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
 			</div>
 		</header>
@@ -65,7 +65,7 @@
 				if (user) {
 					document.getElementById("adminPanel").style.display = "flex";
 					document.getElementById("logoutBtn").style.display = "inline";
-					document.getElementById("loginLogout").style.display = "none";
+					document.getElementById("login").style.display = "none";
 					document.getElementById("loggedIn").style.display = "inline";
 					loadPhotos();
 				} else {
@@ -76,7 +76,7 @@
 			netlifyIdentity.on("login", (user) => {
 				document.getElementById("adminPanel").style.display = "flex";
 				document.getElementById("logoutBtn").style.display = "inline";
-				document.getElementById("loginLogout").style.display = "none";
+				document.getElementById("login").style.display = "none";
 				document.getElementById("loggedIn").style.display = "inline";
 				netlifyIdentity.close();
 			});
@@ -84,7 +84,7 @@
 			netlifyIdentity.on("logout", () => {
 				document.getElementById("adminPanel").style.display = "none";
 				document.getElementById("logoutBtn").style.display = "none";
-				document.getElementById("loginLogout").style.display = "inline";
+				document.getElementById("login").style.display = "inline";
 				document.getElementById("loggedIn").style.display = "none";
 			});
 
@@ -118,10 +118,10 @@
 					body: JSON.stringify({ fileName }),
 				});
 				if (res.ok) {
-					alert("Photo deleted!");
+					showToast("Photo deleted!", "success");
 					loadPhotos();
 				} else {
-					alert("Delete failed!");
+					showToast("Delete failed!", "error");
 				}
 			}
 
@@ -144,18 +144,35 @@
 						}),
 					});
 					if (res.ok) {
-						alert("Photo uploaded!");
+						showToast("Photo uploaded!", "success");
 						loadPhotos();
 					} else {
-						alert("Upload failed!");
+						showToast("Upload failed!", "error");
 					}
 				};
 				reader.readAsDataURL(file);
 			};
 
-			// Load photos when page opens
+			function showToast(message, type = "success") {
+				const container = document.getElementById("toastContainer");
+				const toast = document.createElement("div");
+				toast.className = `toast ${type}`;
+				toast.textContent = message;
+
+				container.appendChild(toast);
+
+				// Trigger animation
+				setTimeout(() => toast.classList.add("show"), 100);
+
+				// Auto-remove after 3 seconds
+				setTimeout(() => {
+					toast.classList.remove("show");
+					setTimeout(() => toast.remove(), 300);
+				}, 3000);
+			}
 
 			document.getElementById("filterCategory").onchange = loadPhotos;
 		</script>
+		<div id="toastContainer"></div>
 	</body>
 </html>

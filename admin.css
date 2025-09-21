@@ -56,7 +56,7 @@ input[type="file"]::file-selector-button {
 	cursor: pointer;
 }
 
-button,
+button:hover,
 input[type="file"]::file-selector-button:hover {
 	background-color: #2e93ff;
 }
@@ -153,4 +153,34 @@ select {
 	display: flex;
 	gap: 1rem;
 	padding: 1rem;
+}
+
+#toastContainer {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 9999;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.toast {
+	padding: 12px 18px;
+	border-radius: 6px;
+	background: #333;
+	color: white;
+	font-size: 14px;
+	opacity: 0;
+	transform: translateY(-20px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+.toast.success {
+	background: #2ecc71; /* green */
+}
+.toast.error {
+	background: #e74c3c; /* red */
 }
