@@ -68,6 +68,7 @@
 					document.getElementById("logoutBtn").style.display = "inline";
 					document.getElementById("login").style.display = "none";
 					document.getElementById("loggedIn").style.display = "inline";
+					document.getElementById("instructions").style.display = "none";
 					loadPhotos();
 				} else {
 					document.getElementById("adminPanel").style.display = "none";
@@ -79,6 +80,7 @@
 				document.getElementById("logoutBtn").style.display = "inline";
 				document.getElementById("login").style.display = "none";
 				document.getElementById("loggedIn").style.display = "inline";
+				document.getElementById("instructions").style.display = "none";
 				loadPhotos();
 				netlifyIdentity.close();
 			});
@@ -88,6 +90,7 @@
 				document.getElementById("logoutBtn").style.display = "none";
 				document.getElementById("login").style.display = "inline";
 				document.getElementById("loggedIn").style.display = "none";
+				document.getElementById("instructions").style.display = "block";
 			});
 
 			// Load photos from GitHub
