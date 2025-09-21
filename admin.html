@@ -62,7 +62,7 @@
 			// Show/hide admin panel based on login status
 			netlifyIdentity.on("init", (user) => {
 				if (user) {
-					document.getElementById("adminPanel").style.display = "flex";
+					document.getElementById("adminPanel").style.display = "hidden";
 					// document.getElementById("logoutBtn").style.display = "inline";
 				}
 			});
