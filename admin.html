@@ -129,8 +129,20 @@
 			document.getElementById("uploadBtn").onclick = () => {
 				const file = document.getElementById("photoFile").files[0];
 				const category = document.getElementById("photoCategory").value;
-				if (!file) return alert("Select a file!");
+				if (!file) return showToast("Select a file!", "error");
 
+				// 🔹 Show local preview immediately
+				const previewUrl = URL.createObjectURL(file);
+				const list = document.getElementById("photoList");
+				const li = document.createElement("li");
+				li.classList.add("image-container");
+				li.innerHTML = `
+    <img class="thumbnail" src="${previewUrl}"/> 
+    <span>Uploading...</span>
+  `;
+				list.prepend(li);
+
+				// Upload to GitHub
 				const reader = new FileReader();
 				reader.onloadend = async () => {
 					const content = reader.result.split(",")[1]; // base64 without prefix
@@ -143,9 +155,11 @@
 							category,
 						}),
 					});
+
 					if (res.ok) {
 						showToast("Photo uploaded!", "success");
-						loadPhotos();
+						// Reload list after short delay so GitHub has time to serve the file
+						setTimeout(loadPhotos, 3000);
 					} else {
 						showToast("Upload failed!", "error");
 					}
