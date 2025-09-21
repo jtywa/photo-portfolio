@@ -70,14 +70,14 @@
 
 			netlifyIdentity.on("login", (user) => {
 				document.getElementById("adminPanel").style.display = "flex";
-				document.getElementById("logoutBtn").style.display = "inline";
+				//document.getElementById("logoutBtn").style.display = "inline";
 				document.getElementById("loginLogout").style.display = "hidden";
 				netlifyIdentity.close();
 			});
 
 			netlifyIdentity.on("logout", () => {
 				document.getElementById("adminPanel").style.display = "none";
-				document.getElementById("logoutBtn").style.display = "none";
+				//document.getElementById("logoutBtn").style.display = "none";
 				document.getElementById("loginLogout").style.display = "inline";
 			});
 
