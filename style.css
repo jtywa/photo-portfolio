@@ -39,11 +39,6 @@ h1 {
 	transform: scale(1.03);
 }
 
-.thumbnail {
-	max-height: 200px;
-	max-width: 200px;
-}
-
 ul {
 	list-style-type: none;
 }

@@ -2,35 +2,45 @@
 <html>
 	<head>
 		<title>Photo Admin</title>
-		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="admin.css" />
 		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 	</head>
 	<body>
-		<h1>Photo Admin</h1>
+		<header class="header">
+			<h3>Photo Admin</h3>
+			<div id="auth">
+				<button onclick="netlifyIdentity.open()">Login / Logout</button>
+				<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
+			</div>
+		</header>
 
 		<!-- Login/Logout UI -->
-		<div id="auth">
-			<button onclick="netlifyIdentity.open()">Login / Logout</button>
-			<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
-		</div>
 
 		<!-- Admin Panel (hidden until logged in) -->
-		<div id="adminPanel" style="display: none">
-			<h2>Upload New Photo</h2>
-			<input type="file" id="photoFile" />
-			<select id="photoCategory">
-				<option value="mountains">Mountains</option>
-				<option value="sunsets">Sunsets</option>
-			</select>
-			<button id="uploadBtn">Upload</button>
+		<div id="adminPanel">
+			<div id="container">
+				<div id="uploadBar">
+					<div>Upload New Photo</div>
+					<input type="file" id="photoFile" />
+					<select id="photoCategory">
+						<option value="mountains">Mountains</option>
+						<option value="sunsets">Sunsets</option>
+					</select>
+					<button id="uploadBtn">Upload</button>
+				</div>
+				<div id="existingPhotos">
+					<div id="existingPhotosHeader">
+						<h2>Existing Photos</h2>
+						<select id="filterCategory">
+							<option value="all">All Categories</option>
+							<option value="mountains">Mountains</option>
+							<option value="sunsets">Sunsets</option>
+						</select>
+					</div>
 
-			<h2>Existing Photos</h2>
-			<select id="filterCategory">
-				<option value="all">All Categories</option>
-				<option value="mountains">Mountains</option>
-				<option value="sunsets">Sunsets</option>
-			</select>
-			<ul id="photoList"></ul>
+					<ul id="photoList"></ul>
+				</div>
+			</div>
 		</div>
 
 		<script>
@@ -80,9 +90,10 @@
 					.filter((photo) => filter === "all" || photo.category === filter)
 					.forEach((photo) => {
 						const li = document.createElement("li");
+						li.classList.add("image-container");
 						li.innerHTML = `
               <img class="thumbnail" src="${photo.url}"/> 
-              <button onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
+              <button class="top-right-button" onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
             `;
 						list.appendChild(li);
 					});
