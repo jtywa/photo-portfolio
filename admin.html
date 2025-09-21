@@ -147,8 +147,10 @@
 				const li = document.createElement("li");
 				li.classList.add("image-container");
 				li.innerHTML = `
-    <img class="thumbnail" src="${previewUrl}"/> 
-    <span>Uploading...</span>
+				<img class="thumbnail" src="${previewUrl}"/> 
+				<button class="top-right-button">
+					<i class="fa-spinner" "fa-spin"></i>
+				</button>
   `;
 				list.prepend(li);
 
