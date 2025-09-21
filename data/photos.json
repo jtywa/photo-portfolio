@@ -1,10 +1,14 @@
 [
-	{
-		"category": "sunsets",
-		"url": "uploads/sunset.jpg"
-	},
-	{
-		"category": "mountains",
-		"url": "uploads/mountain.jpg"
-	}
+  {
+    "category": "sunsets",
+    "url": "uploads/sunset.jpg"
+  },
+  {
+    "category": "mountains",
+    "url": "uploads/mountain.jpg"
+  },
+  {
+    "category": "mountains",
+    "url": "uploads/mountain2.jpg"
+  }
 ]
