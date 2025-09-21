@@ -10,6 +10,7 @@
 			<h3>Photo Admin</h3>
 			<div id="auth">
 				<button id="loginLogout" onclick="netlifyIdentity.open()">Login / Logout</button>
+				<div id="loggedIn">Logged in as Admin</div>
 				<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
 			</div>
 		</header>
@@ -65,6 +66,7 @@
 					document.getElementById("adminPanel").style.display = "hidden";
 					document.getElementById("logoutBtn").style.display = "none";
 					document.getElementById("loginLogout").style.display = "inline";
+					document.getElementById("loggedIn").style.display = "none";
 				}
 			});
 
@@ -72,6 +74,7 @@
 				document.getElementById("adminPanel").style.display = "flex";
 				document.getElementById("logoutBtn").style.display = "none";
 				document.getElementById("loginLogout").style.display = "hidden";
+				document.getElementById("loggedIn").style.display = "inline";
 				netlifyIdentity.close();
 			});
 
@@ -79,6 +82,7 @@
 				document.getElementById("adminPanel").style.display = "none";
 				document.getElementById("logoutBtn").style.display = "none";
 				document.getElementById("loginLogout").style.display = "inline";
+				document.getElementById("loggedIn").style.display = "none";
 			});
 
 			// Load photos from GitHub
