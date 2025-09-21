@@ -18,7 +18,7 @@
 		<!-- Login/Logout UI -->
 
 		<!-- Admin Panel (hidden until logged in) -->
-		<div id="adminPanel" style="display: hidden">
+		<div id="adminPanel" style="display: none">
 			<div id="container">
 				<div id="uploadBar">
 					<div>Upload New Photo</div>
@@ -63,10 +63,13 @@
 			// Show/hide admin panel based on login status
 			netlifyIdentity.on("init", (user) => {
 				if (user) {
-					document.getElementById("adminPanel").style.display = "hidden";
-					document.getElementById("logoutBtn").style.display = "none";
-					document.getElementById("loginLogout").style.display = "inline";
-					document.getElementById("loggedIn").style.display = "none";
+					document.getElementById("adminPanel").style.display = "flex";
+					document.getElementById("logoutBtn").style.display = "inline";
+					document.getElementById("loginLogout").style.display = "none";
+					document.getElementById("loggedIn").style.display = "inline";
+					loadPhotos();
+				} else {
+					document.getElementById("adminPanel").style.display = "none";
 				}
 			});
 
@@ -151,7 +154,7 @@
 			};
 
 			// Load photos when page opens
-			loadPhotos();
+
 			document.getElementById("filterCategory").onchange = loadPhotos;
 		</script>
 	</body>
