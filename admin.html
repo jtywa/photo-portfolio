@@ -109,7 +109,9 @@
 						li.classList.add("image-container");
 						li.innerHTML = `
               <img class="thumbnail" src="${photo.url}"/>
-			  <i class="fa-solid fa-trash-can top-right-button" onclick="deletePhoto('${photo.url.split("/").pop()}')"></i>
+			  <button class="top-right-button" onclick="deletePhoto(this, '${photo.url.split("/").pop()}')">
+			  	<i class="fa-solid fa-trash-can"></i>
+			  </button>
             `;
 						list.appendChild(li);
 					});
