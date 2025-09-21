@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 		<title>Photo Admin</title>
 		<link rel="stylesheet" href="admin.css" />
 		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -16,7 +17,7 @@
 		</header>
 
 		<!-- Instructions (hidden when logged in) -->
-		<div id="instructions">Log in to access admin features.</div>
+		<div id="instructions"><span>Log in to access admin features.</span></div>
 
 		<!-- Admin Panel (hidden until logged in) -->
 		<div id="adminPanel" style="display: none">
@@ -107,8 +108,8 @@
 						const li = document.createElement("li");
 						li.classList.add("image-container");
 						li.innerHTML = `
-              <img class="thumbnail" src="${photo.url}"/> 
-              <button class="top-right-button" onclick="deletePhoto('${photo.url.split("/").pop()}')">Delete</button>
+              <img class="thumbnail" src="${photo.url}"/>
+			  <i class="fa-solid fa-trash-can top-right-button" onclick="deletePhoto('${photo.url.split("/").pop()}')"></i>
             `;
 						list.appendChild(li);
 					});
