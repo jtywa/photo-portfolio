@@ -15,7 +15,8 @@
 			</div>
 		</header>
 
-		<!-- Login/Logout UI -->
+		<!-- Instructions (hidden when logged in) -->
+		<div id="instructions">Log in to access admin features.</div>
 
 		<!-- Admin Panel (hidden until logged in) -->
 		<div id="adminPanel" style="display: none">
@@ -43,7 +44,7 @@
 				</div>
 			</div>
 		</div>
-
+		<div id="toastContainer"></div>
 		<script>
 			// 🔐 Secure fetch wrapper
 			async function secureFetch(url, options = {}) {
@@ -78,6 +79,7 @@
 				document.getElementById("logoutBtn").style.display = "inline";
 				document.getElementById("login").style.display = "none";
 				document.getElementById("loggedIn").style.display = "inline";
+				loadPhotos();
 				netlifyIdentity.close();
 			});
 
@@ -187,6 +189,5 @@
 
 			document.getElementById("filterCategory").onchange = loadPhotos;
 		</script>
-		<div id="toastContainer"></div>
 	</body>
 </html>
