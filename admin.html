@@ -117,6 +117,9 @@
 
 			// Delete photo
 			async function deletePhoto(fileName) {
+				const icon = btn.querySelector("i");
+				icon.classList.remove("fa-trash-can");
+				icon.classList.add("fa-spinner", "fa-spin");
 				const res = await secureFetch("/.netlify/functions/deletePhoto", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
