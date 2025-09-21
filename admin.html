@@ -10,7 +10,7 @@
 			<h3>Photo Admin</h3>
 			<div id="auth">
 				<div id="loggedIn" style="display: none">Logged in as Admin</div>
-				<button id="loginLogout" onclick="netlifyIdentity.open()">Login / Logout</button>
+				<button id="loginLogout" onclick="netlifyIdentity.open()">Login</button>
 				<button id="logoutBtn" style="display: none" onclick="netlifyIdentity.logout()">Logout</button>
 			</div>
 		</header>
@@ -75,8 +75,8 @@
 
 			netlifyIdentity.on("login", (user) => {
 				document.getElementById("adminPanel").style.display = "flex";
-				document.getElementById("logoutBtn").style.display = "none";
-				document.getElementById("loginLogout").style.display = "hidden";
+				document.getElementById("logoutBtn").style.display = "inline";
+				document.getElementById("loginLogout").style.display = "none";
 				document.getElementById("loggedIn").style.display = "inline";
 				netlifyIdentity.close();
 			});
